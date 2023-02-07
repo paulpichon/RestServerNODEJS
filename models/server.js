@@ -1,6 +1,8 @@
 //manejaremos CLASES 
 //importacion de express
-const express = require('express')
+const express = require('express');
+//importar CORS
+const cors = require('cors')
 
 class Server {
     //constructor
@@ -23,7 +25,11 @@ class Server {
     //middleware
     middlewares() {
 
+        //CORS
+        this.app.use( cors() );
+
         //Directorio público
+        //la palabra reservada .use() nos indica que es un middleware
         this.app.use( express.static('public') );
 
     }
