@@ -1,15 +1,14 @@
-//DOTENV
 //alno usar modulos lo importamos con require
-require('dotenv').config()
+//dotenv variables de entorno
+require('dotenv').config();
 
-//creacion del web server
-const express = require('express')
-const app = express()
+//importar la clase Server
+const Server = require('./models/server');
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
 
-app.listen( process.env.PORT, () => {
-    console.log("Servidor correindo en el puerto", process.env.PORT);
-});
+//llamamos la clase Server
+//creamos una instancia de la clase
+const server = new Server();
+
+//y llamamos el metodo por el cual escucha nuestra aplicacion
+server.listen();
