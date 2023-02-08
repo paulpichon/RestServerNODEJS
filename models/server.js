@@ -31,6 +31,10 @@ class Server {
         //CORS
         this.app.use( cors() );
 
+        //Lectura y Parseo del body que sera lo que manda el usuario en una request
+        //recordar que para ser un middleware se usa .use() y le pasamos como argumento express.json() que es una funcion
+        this.app.use( express.json() );
+
         //Directorio público
         //la palabra reservada .use() nos indica que es un middleware
         this.app.use( express.static('public') );

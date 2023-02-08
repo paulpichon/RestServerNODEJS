@@ -13,8 +13,16 @@ const usuariosGet = (req, res = response) => {
 
 //usuarios Post
 const usuariosPost = (req, res = response) => {
+
+    //esto es lo que viene como peticion del usuario es el REQUEST-> req de nuestro parametro
+    //podemos desestructurarlo
+    //const body = req.body;
+    const { nombre, edad } = req.body;
+
     res.json({
-        msg: 'post API - usuariosPost'
+        msg: 'post API - usuariosPost',
+        nombre,
+        edad
     });
 };
 //usuarios put
