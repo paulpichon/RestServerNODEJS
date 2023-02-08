@@ -10,7 +10,7 @@ class Server {
         //estosignifica que creacion el servidor como una propiedad de la clase Server
         this.app = express();
         //declaramos el puerto donde estaremos escuchando
-        this.port = process.env.PORT;
+        this.port = process.env.PORT || 3000;
 
         //Definir las rutas que manejamos para poder tenerlas a la vista
         this.usuariosPath = '/api/usuarios';
