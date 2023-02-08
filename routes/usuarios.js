@@ -18,7 +18,9 @@ router.get('/', usuariosGet );
 //Peticiones post
 router.post('/', usuariosPost);
 //Peticiones put
-router.put('/', usuariosPut );
+//para obtener un parametro de la URL siempre y cuando sea un numero se pone el nombre del parametro de la siguiente 
+//forma -> /:id
+router.put('/:id', usuariosPut );
 //Peticiones patch
 router.patch('/', usuariosPatch);
 //Peticiones delete
