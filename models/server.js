@@ -12,6 +12,9 @@ class Server {
         //declaramos el puerto donde estaremos escuchando
         this.port = process.env.PORT;
 
+        //Definir las rutas que manejamos para poder tenerlas a la vista
+        this.usuariosPath = '/api/usuarios';
+
         //middlewares
         //los middlewares  son los que van añadir otra funcionalidad al web server
         this.middlewares();
@@ -38,36 +41,9 @@ class Server {
 
     //creacion de una propiedad llamada routes que manejara todas las rutas de del rest server
     routes() {
-        //Peticiones GET
-        this.app.get('/api', (req, res) => {
-            res.json({
-                msg: 'get API'
-            });
-        });
-        //Peticiones put
-        this.app.put('/api', (req, res) => {
-            res.json({
-                msg: 'put API'
-            });
-        });
-        //Peticiones post
-        this.app.post('/api', (req, res) => {
-            res.json({
-                msg: 'post API'
-            });
-        });
-        //Peticiones delete
-        this.app.delete('/api', (req, res) => {
-            res.json({
-                msg: 'delete API'
-            });
-        });
-        //Peticiones patch
-        this.app.patch('/api', (req, res) => {
-            res.json({
-                msg: 'patch API'
-            });
-        });
+        //para poder usar las rutas del archivo user.js
+        //this.usuariosPath -> valor definido en el constructor
+        this.app.use( this.usuariosPath, require('../routes/usuarios'));
     }
     //creacion de metodo listen que significara que estara escuchando lo que pasa en ese puerto
     listen() {
