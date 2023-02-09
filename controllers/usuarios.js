@@ -1,5 +1,10 @@
 //express -> response
 const { response, request } = require('express');
+//importar el modelo para poder grabar en la base de datos
+//ponemos U al inicio de usuario porque esto nos permitira crear instancias de esta constante
+//Es un estandar ponerlo asi
+const Usuario = require('../models/usuario');
+
 
 //funciones
 
@@ -26,17 +31,21 @@ const usuariosGet = (req = request, res = response) => {
 };
 
 //usuarios Post
-const usuariosPost = (req, res = response) => {
+const usuariosPost = async(req, res = response) => {
 
     //esto es lo que viene como peticion del usuario es el REQUEST-> req de nuestro parametro
     //podemos desestructurarlo
     //const body = req.body;
-    const { nombre, edad } = req.body;
+    const body = req.body;
+    //creando una instancia de Usuario para poder grabar en la base de datos
+    //y pasamos como argumento el body
+    const usuario = new Usuario( body );
+    
+    //para decirle a mongo/mongoose que guarde el registro
+    await usuario.save();
 
     res.json({
-        msg: 'post API - usuariosPost',
-        nombre,
-        edad
+        usuario
     });
 };
 //usuarios put
