@@ -1,5 +1,7 @@
 //express -> response
 const { response, request } = require('express');
+//importamos bcryptj para encriptar las contraseñas
+const bcryptjs = require('bcryptjs');
 //importar el modelo para poder grabar en la base de datos
 //ponemos U al inicio de usuario porque esto nos permitira crear instancias de esta constante
 //Es un estandar ponerlo asi
@@ -36,11 +38,21 @@ const usuariosPost = async(req, res = response) => {
     //esto es lo que viene como peticion del usuario es el REQUEST-> req de nuestro parametro
     //podemos desestructurarlo
     //const body = req.body;
-    const body = req.body;
+    const { nombre, correo, password, rol } = req.body;
     //creando una instancia de Usuario para poder grabar en la base de datos
     //y pasamos como argumento el body
-    const usuario = new Usuario( body );
+    const usuario = new Usuario({ nombre, correo, password, rol });
     
+    //Verificar si el correo esta repetido
+
+    //Encriptar la contraseña
+    //por defecto .genSaltSync() tiene 10 en cuanto a seguridad(vueltas) pero se puede cambiar el valor
+    //peroel que viene por default es bueno
+    const salt = bcryptjs.genSaltSync();
+    //encriptar contraseña  
+    usuario.password = bcryptjs.hashSync( password, salt );
+
+    //Guardar en base de datos
     //para decirle a mongo/mongoose que guarde el registro
     await usuario.save();
 
