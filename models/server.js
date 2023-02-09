@@ -2,7 +2,9 @@
 //importacion de express
 const express = require('express');
 //importar CORS
-const cors = require('cors')
+const cors = require('cors');
+//importar conexion a base de datos
+const { dbConnection } = require('../database/config.js');
 
 class Server {
     //constructor
@@ -15,6 +17,9 @@ class Server {
         //Definir las rutas que manejamos para poder tenerlas a la vista
         this.usuariosPath = '/api/usuarios';
 
+        //conectar a la base de datos
+        this.conectarDB();
+
         //middlewares
         //los middlewares  son los que van añadir otra funcionalidad al web server
         this.middlewares();
@@ -23,6 +28,11 @@ class Server {
         //rutas de mi aplicacion
         //hacemos llamado a las rutas
         this.routes();
+    }
+
+    //metodo para conectarse a la base de datos
+    async conectarDB() {
+        await dbConnection();
     }
 
     //middleware
