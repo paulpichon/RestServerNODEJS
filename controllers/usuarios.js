@@ -2,8 +2,6 @@
 const { response, request } = require('express');
 //importamos bcryptj para encriptar las contraseñas
 const bcryptjs = require('bcryptjs');
-//verificar/confirmar si hay errores desde routes
-const { validationResult } = require('express-validator');
 //importar el modelo para poder grabar en la base de datos
 //ponemos U al inicio de usuario porque esto nos permitira crear instancias de esta constante
 //Es un estandar ponerlo asi
@@ -37,14 +35,6 @@ const usuariosGet = (req = request, res = response) => {
 
 //usuarios Post
 const usuariosPost = async(req, res = response) => {
-
-    //confirmar si hay errores
-    const errors = validationResult( req );
-    //verificar si  hay errores
-    if ( !errors.isEmpty() ) {
-        //retornar los errores encontrados
-        return res.status( 400 ).json( errors );
-    }
 
     //esto es lo que viene como peticion del usuario es el REQUEST-> req de nuestro parametro
     //podemos desestructurarlo
