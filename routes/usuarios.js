@@ -5,6 +5,8 @@ const { check } = require('express-validator');
 
 //importar middleware validarCampos
 const { validarCampos } = require('../middlewares/validar-campos');
+//importar Role de models
+const Role = require('../models/role');
 
 //importacaiones de mis funciones
 const { usuariosGet, 
@@ -34,7 +36,22 @@ router.post('/', [
     //en este caso usaremos el check() que es un middelware donde especificamos que campo del BODY necesito revisar en este caso sera el correo, podemos pasar como 2do argumento un mensaje de error
     check('correo', 'El correo no es válido').isEmail(),
     //.isIn() verifica lo que hay dentro de un arreglo
-    check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
+    //lo mas conveniente es que n luigar del arreglo que esta en duro usemos una base de datos
+    //check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
+    
+    //evaluamos el rol contra lo que hay en la base datos
+    //se usa CUSTOM()  para hacer una verificacion personalizada
+    check('rol').custom( async(rol = '') => {
+        //verificar si existe  el rol en la coleccion de la base de datos
+        const existeRol = await Role.findOne({ rol });
+        
+        //pero si no existe
+        if (!existeRol) {
+            //presonalizamos nuestro mensaje de error
+            throw new Error(`El rol ${ rol } no está registrado en la base de datos`);
+        }
+
+    }),
     //validarCampos sera el ultimo middleware que usaremos despues de validar con el check
     validarCampos
 
