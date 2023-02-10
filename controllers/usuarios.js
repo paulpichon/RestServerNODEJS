@@ -65,7 +65,7 @@ const usuariosPost = async(req, res = response) => {
     //Guardar en base de datos
     //para decirle a mongo/mongoose que guarde el registro
     await usuario.save();
-
+    //regresa el usuario grabado
     res.json({
         usuario
     });

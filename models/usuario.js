@@ -34,6 +34,18 @@ const UsuarioSchema = Schema({
      }
 });
 
+//esto es para quitar ciertas campos que no quiere tener en la respuesta del JSON una vez grabado en la BD
+//sobreescribir un metodo llamado toJSON
+//debe ser igual a una funcion NORMAL ya que usaremos THIS
+UsuarioSchema.methods.toJSON = function() {
+   //desestructurar algo que viene de .toObject()
+   //toObject() esto genera una instancia de UsuarioSchema con sus valores respectivos
+   //y dentro de las llaves ponemos lo que queremos quitar
+   //y el resto de argumentos los unificamos con el operador "rest"
+   const { __v, password, ...usuario } = this.toObject();
+   //y retornamos el usuario
+   return usuario;
+}
 
 
 
