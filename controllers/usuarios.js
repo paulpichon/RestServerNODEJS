@@ -57,7 +57,7 @@ const usuariosPost = async(req, res = response) => {
 
     //Encriptar la contraseña
     //por defecto .genSaltSync() tiene 10 en cuanto a seguridad(vueltas) pero se puede cambiar el valor
-    //peroel que viene por default es bueno
+    //pero el que viene por default es bueno
     const salt = bcryptjs.genSaltSync();
     //encriptar contraseña  
     usuario.password = bcryptjs.hashSync( password, salt );
@@ -71,7 +71,7 @@ const usuariosPost = async(req, res = response) => {
     });
 };
 //usuarios put
-const usuariosPut = (req, res = response) => {
+const usuariosPut = async(req, res = response) => {
 
     //ahora asignamos req.params.id a un variable que creamos
     //req.params.id --> id es el nombre que le dimos en el parametro del archivo usuarios.js
@@ -81,10 +81,29 @@ const usuariosPut = (req, res = response) => {
 
     //desestructuracion
     const { id } = req.params;
+    //extraer lo que no necesito que se grabe en la base de datos
+    //...resto ---> las demas propiedades
+    const { password, google, correo, ...resto } = req.body;
+
+    //TODO: validar contra base de datos
+    //si viene el password
+    if( password ) {
+        //por defecto .genSaltSync() tiene 10 en cuanto a seguridad(vueltas) pero se puede cambiar el valor
+        //pero el que viene por default es bueno
+        const salt = bcryptjs.genSaltSync();
+        //encriptar contraseña  
+        resto.password = bcryptjs.hashSync( password, salt );
+    }
+
+    //actualizar registro
+    //.findByIdAndUpdate('ID', 'informacion que voy actualizar') ---> buscar por el ID y actualizarlo
+    //si no es un ID valido crashea la app
+    const usuario = await Usuario.findByIdAndUpdate( id, resto );
+
 
     res.json({
         msg: 'put API - usuariosPut',
-        id
+        usuario
     });
 }
 //usuarios patch
