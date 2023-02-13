@@ -6,7 +6,8 @@ const { check } = require('express-validator');
 //importar middleware validarCampos
 const { validarCampos } = require('../middlewares/validar-campos');
 //importar esRoleValido
-const { esRoleValido } = require('../helpers/db-validators');
+//existeemail para verificar correo existe
+const { esRoleValido, existeEmail } = require('../helpers/db-validators');
 
 
 //importacaiones de mis funciones
@@ -36,6 +37,8 @@ router.post('/', [
     check('password', 'La contraseña debe tener minimo 6 caracteres').isLength({ min: 6 }),
     //en este caso usaremos el check() que es un middelware donde especificamos que campo del BODY necesito revisar en este caso sera el correo, podemos pasar como 2do argumento un mensaje de error
     check('correo', 'El correo no es válido').isEmail(),
+    //creamos nuestro propio manejo de error en caso de que el correo ya existe en la base de datos
+    check('correo').custom( existeEmail ),
     //.isIn() verifica lo que hay dentro de un arreglo
     //lo mas conveniente es que n luigar del arreglo que esta en duro usemos una base de datos
     //check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE', 'USER_ROLE']),

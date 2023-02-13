@@ -1,5 +1,7 @@
 //importar Role de models
 const Role = require('../models/role');
+//para verificar el email
+const Usuario = require('../models/usuario');
 
 const esRoleValido = async(rol = '') => {
     //verificar si existe  el rol en la coleccion de la base de datos
@@ -13,7 +15,20 @@ const esRoleValido = async(rol = '') => {
 
 }
 
+//funcion para verificar si un email existe
+const existeEmail = async( correo = '' ) => {
+    //verificar si el correo ya existe en la coleccion de la base de datos
+    //findOne() --> metodo/funcion para verificar si hay algo repetido
+    const verificarEmail = await Usuario.findOne({ correo });
+
+    if ( verificarEmail ) {
+        //presonalizamos nuestro mensaje de error
+        throw new Error(`Ese correo ${ correo } ya esta registrado`);
+    }
+}
+
 //exportar 
 module.exports = {
-    esRoleValido
+    esRoleValido,
+    existeEmail
 }

@@ -46,14 +46,14 @@ const usuariosPost = async(req, res = response) => {
     
     //Verificar si el correo esta repetido
     //findOne() --> metodo/funcion para verificar si hay algun correo repetido
-    const existeEmail = await Usuario.findOne({ correo });
+    /*const existeEmail = await Usuario.findOne({ correo });
 
     if ( existeEmail ) {
         //regresamos un badRequest 400
         return res.status(400).json({
             msg: 'Ese correo ya esta registrado'
         });
-    }
+    }*/
 
     //Encriptar la contraseña
     //por defecto .genSaltSync() tiene 10 en cuanto a seguridad(vueltas) pero se puede cambiar el valor
