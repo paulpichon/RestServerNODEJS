@@ -28,19 +28,45 @@ const usuariosGet = async(req = request, res = response) => {
     //en caso de que no venga el limite en los parametros de la URL le ponemos por defecto limite = 5
     //desde = 0 desde que registro me va a mostrar informacion por ejemplo desde = 5
     const { limite = 5, desde = 0} = req.query;
-
+    //variable para que determinemos el estado de los usuario true/false 
+    //usuarios que solo esten activos estado = true ---> dentro de .find({ estado: true })
+    const query = { estado: true }
     //GET de todos los usuarios
     //find() ---> muestra los usarios(TODOS)
     //adicional a esto le podemos validar ciertos cosas mas , como que desde y limite sean solo numeros
-    const usuarios = await Usuario.find()
+    //ademas vamos a mostrar a los usuarios que solo esten activos estado = true ---> dentro de .find({ estado: true })
+    //const usuarios = await Usuario.find(query)
         //especifica desde donde nostraera informacion
-        .skip(Number( desde ))
+        //.skip(Number( desde ))
         //limitar el numero de querys que nos traera la consulta
         //.limit()   ---> dentro de los parentesis va el numero de registros que quiero que traiga
         //por si las dudas convertimos limite de un string a un numero
-        .limit( Number( limite ) );
+        //.limit( Number( limite ) );
 
+    //Retornar el numero toal de registros en una coleccion
+    //.countDocuments() ---> retorna el numer de registros
+    //ademas vamos a contar a los usuarios que solo esten activos estado = true ---> dentro de .find({ estado: true })
+    //const total = await Usuario.countDocuments(query);
+
+
+    //creamos una Promesa ---> Promise.all() para que solucionar el retardo del conteo de los registros que se hace despues de traer todos los usuarios
+    //permite crear un arreglo con todas las PROMESAS que quiero que se ejecuten
+    //la respuesta sera una coleccion de promesas
+    //aplicamos desestructuracion de ARREGLOS
+    const [total, usuarios] = await Promise.all([
+        Usuario.countDocuments(query),
+        Usuario.find(query)
+            //especifica desde donde nostraera informacion
+            .skip(Number( desde ))
+            //limitar el numero de querys que nos traera la consulta
+            //.limit()   ---> dentro de los parentesis va el numero de registros que quiero que traiga
+            //por si las dudas convertimos limite de un string a un numero
+            .limit( Number( limite ) )
+    ]);
+
+    //en lugar de retornar total y usuario, retornamos la respuesta
     res.json({ 
+        total,
         usuarios 
     });
 };
