@@ -14,22 +14,34 @@ const Usuario = require('../models/usuario');
 //usuarios GET
 //asignamos response -> res
 //asignamos request -> req
-const usuariosGet = (req = request, res = response) => {
+const usuariosGet = async(req = request, res = response) => {
 
     //extraer params, cabe resaltar que para extraer parametros de la url al ser una peticion GET solo se hace en el controlador
     //se puede desestructurar
     //const query = req.query;
     //desestructurar
     //recordar que si no viene un parametro en la url, nosotros podemos definir un valor por defecto al desestructurar
-    const { q, nombre = 'No name', apikey, page = 1, limit } = req.query;
+    //const { q, nombre = 'No name', apikey, page = 1, limit } = req.query;
 
-    res.json({
-        msg: 'get API - usuariosGet',
-        q,
-        nombre,
-        apikey,
-        page,
-        limit
+    //************************************************************************* */
+    //desestructurar de los argumentos que vienen en el request.query
+    //en caso de que no venga el limite en los parametros de la URL le ponemos por defecto limite = 5
+    //desde = 0 desde que registro me va a mostrar informacion por ejemplo desde = 5
+    const { limite = 5, desde = 0} = req.query;
+
+    //GET de todos los usuarios
+    //find() ---> muestra los usarios(TODOS)
+    //adicional a esto le podemos validar ciertos cosas mas , como que desde y limite sean solo numeros
+    const usuarios = await Usuario.find()
+        //especifica desde donde nostraera informacion
+        .skip(Number( desde ))
+        //limitar el numero de querys que nos traera la consulta
+        //.limit()   ---> dentro de los parentesis va el numero de registros que quiero que traiga
+        //por si las dudas convertimos limite de un string a un numero
+        .limit( Number( limite ) );
+
+    res.json({ 
+        usuarios 
     });
 };
 
@@ -102,11 +114,8 @@ const usuariosPut = async(req, res = response) => {
     //{new: true} ----> para que nos devuelva el registro actualizado y no el anterior
     const usuario = await Usuario.findByIdAndUpdate( id, resto, {new: true} );
 
-
-    res.json({
-        msg: 'put API - usuariosPut',
-        usuario
-    });
+    //se imprime el objeto usuario en consola
+    res.json({usuario});
 }
 //usuarios patch
 const usuariosPatch = (req, res = response) => {
