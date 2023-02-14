@@ -27,8 +27,22 @@ const existeEmail = async( correo = '' ) => {
     }
 }
 
+//Funcion para validar si existe un usuario por ID
+const existeUsuarioPorId = async( id) => {
+    //verificar si el correo ya existe en la coleccion de la base de datos
+    //findOne() --> metodo/funcion para verificar si hay algo repetido
+    //.findById() --> encuentra un registro por ID
+    const existeUsuario = await Usuario.findById(id);
+    //si es NULL
+    if ( !existeUsuario ) {
+        //presonalizamos nuestro mensaje de error
+        throw new Error(`El id ${ id } no existe`);
+    }
+}
+
 //exportar 
 module.exports = {
     esRoleValido,
-    existeEmail
+    existeEmail,
+    existeUsuarioPorId
 }

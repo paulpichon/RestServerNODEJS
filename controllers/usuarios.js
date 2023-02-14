@@ -83,7 +83,8 @@ const usuariosPut = async(req, res = response) => {
     const { id } = req.params;
     //extraer lo que no necesito que se grabe en la base de datos
     //...resto ---> las demas propiedades
-    const { password, google, correo, ...resto } = req.body;
+    //se extrae _id para que no haya un error de casteo: castError
+    const { _id, password, google, correo, ...resto } = req.body;
 
     //TODO: validar contra base de datos
     //si viene el password
@@ -98,7 +99,8 @@ const usuariosPut = async(req, res = response) => {
     //actualizar registro
     //.findByIdAndUpdate('ID', 'informacion que voy actualizar') ---> buscar por el ID y actualizarlo
     //si no es un ID valido crashea la app
-    const usuario = await Usuario.findByIdAndUpdate( id, resto );
+    //{new: true} ----> para que nos devuelva el registro actualizado y no el anterior
+    const usuario = await Usuario.findByIdAndUpdate( id, resto, {new: true} );
 
 
     res.json({

@@ -7,7 +7,10 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 //importar esRoleValido
 //existeemail para verificar correo existe
-const { esRoleValido, existeEmail } = require('../helpers/db-validators');
+const { 
+        esRoleValido, 
+        existeEmail,
+        existeUsuarioPorId } = require('../helpers/db-validators');
 
 
 //importacaiones de mis funciones
@@ -53,7 +56,18 @@ router.post('/', [
 //Peticiones put
 //para obtener un parametro de la URL siempre y cuando sea un numero se pone el nombre del parametro de la siguiente 
 //forma -> /:id
-router.put('/:id', usuariosPut );
+router.put('/:id', [
+    //middleware para verificar que el ID que venga en la URL se una URL valida de MONGO
+    //.isMongoId() ---> verifica sea una URL valida de MONGO
+    check('id', 'No es un ID válido').isMongoId(),
+    //verificar si existe un usuario por ID manejando el error con un custom
+    check('id').custom( existeUsuarioPorId ),
+    //evaluamos el rol contra lo que hay en la base datos
+    //se usa CUSTOM()  para hacer una verificacion personalizada
+    check('rol').custom( esRoleValido ),
+    //ponemos nuestra funcion validarCampos para que no muestre errores en consola --> que sean nuestros propios ERRORES personalizados
+    validarCampos
+],usuariosPut );
 //Peticiones patch
 router.patch('/', usuariosPatch);
 //Peticiones delete
