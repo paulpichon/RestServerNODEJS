@@ -70,8 +70,17 @@ router.put('/:id', [
 ],usuariosPut );
 //Peticiones patch
 router.patch('/', usuariosPatch);
+
 //Peticiones delete
-router.delete('/', usuariosDelete);
+router.delete('/:id', [
+    //middleware para verificar que el ID que venga en la URL se una URL valida de MONGO
+    //.isMongoId() ---> verifica sea una URL valida de MONGO
+    check('id', 'No es un ID válido').isMongoId(),
+    //verificar si existe un usuario por ID manejando el error con un custom
+    check('id').custom( existeUsuarioPorId ),
+    //ponemos nuestra funcion validarCampos para que no muestre errores en consola --> que sean nuestros propios ERRORES personalizados
+    validarCampos
+],usuariosDelete);
 
 
 //exportaciones

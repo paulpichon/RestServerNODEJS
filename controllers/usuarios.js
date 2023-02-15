@@ -150,10 +150,23 @@ const usuariosPatch = (req, res = response) => {
     });
 }
 //usuarios delete
-const usuariosDelete = (req, res = response) => {
-    res.json({
-        msg: 'delete API - usuariosDelete'
-    });
+const usuariosDelete = async(req, res = response) => {
+
+    //extraer el ID de los params
+    const { id } = req.params;
+
+    //BORRAR FISICAMENTE
+    //ESTE PROCESO ES POCO RECOMENDADO
+    //eliminar un usuario fisicamente .findByIdAndDelete() de la base de datos
+    //const usuario = await Usuario.findByIdAndDelete( id );
+
+    //FORMA RECOMENDADA
+    //cambiamos el estado del usuario
+    //.findByIdAndUpdate( id, { estado: false} ) de esta forma cambiamos el estado del usuario ya que verificamos que el ID si exista y sea un ID valido de MONGO
+    const usuario = await Usuario.findByIdAndUpdate( id, { estado: false} );
+
+    //retornamos el usuario que acaba de ser borrado
+    res.json(usuario);
 }
 
 
