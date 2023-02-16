@@ -16,6 +16,8 @@ class Server {
 
         //Definir las rutas que manejamos para poder tenerlas a la vista
         this.usuariosPath = '/api/usuarios';
+        //ruta para hacer la autenticacion del login
+        this.authPath     = '/api/auth'
 
         //conectar a la base de datos
         this.conectarDB();
@@ -55,6 +57,9 @@ class Server {
 
     //creacion de una propiedad llamada routes que manejara todas las rutas de del rest server
     routes() {
+        //Ruta para la autenticacion de usuario
+        //this.authPath -> valor definido en el constructor
+        this.app.use( this.authPath, require('../routes/auth'));
         //para poder usar las rutas del archivo user.js
         //this.usuariosPath -> valor definido en el constructor
         this.app.use( this.usuariosPath, require('../routes/usuarios'));
