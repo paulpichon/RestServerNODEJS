@@ -42,7 +42,10 @@ UsuarioSchema.methods.toJSON = function() {
    //toObject() esto genera una instancia de UsuarioSchema con sus valores respectivos
    //y dentro de las llaves ponemos lo que queremos quitar
    //y el resto de argumentos los unificamos con el operador "rest"
-   const { __v, password, ...usuario } = this.toObject();
+   const { _id, __v, password, ...usuario } = this.toObject();
+   //en lugar de que nos retorne _id lo vamos a llmar uid
+   //de esta forma no cambiamos _id de la base de datos tan solo cambiamos la vista de _id po uid
+   usuario.uid = _id;
    //y retornamos el usuario
    return usuario;
 }
