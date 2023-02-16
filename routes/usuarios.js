@@ -5,6 +5,9 @@ const { check } = require('express-validator');
 
 //importar middleware validarCampos
 const { validarCampos } = require('../middlewares/validar-campos');
+//importamos validarJWT para poder hacer uso de JWT
+const { validarJWT } = require('../middlewares/validar-jwt');
+
 //importar esRoleValido
 //existeemail para verificar correo existe
 const { 
@@ -73,6 +76,9 @@ router.patch('/', usuariosPatch);
 
 //Peticiones delete
 router.delete('/:id', [
+    //estos middleware se hacen de forma sequiencial, es decir si tiene la funcion next() ejecuta el otro y asi sucesivamente, pero si da un error ya no se ejecutan los demas
+    //llamamos el middleware para usar el TOKEN
+    validarJWT,
     //middleware para verificar que el ID que venga en la URL se una URL valida de MONGO
     //.isMongoId() ---> verifica sea una URL valida de MONGO
     check('id', 'No es un ID válido').isMongoId(),
