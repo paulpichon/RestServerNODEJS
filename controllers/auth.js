@@ -6,6 +6,8 @@ const bcryptjs = require('bcryptjs');
 
 //necesitamos el modelo de usuarios para verificar por CORREO si existe el USUARIO en la BD
 const Usuario = require('../models/usuario');
+//importar funcion para generar el TOKEN
+const { generarJWT } = require("../helpers/generar-jwt");
 
 
 const login = async(req, res = response) => {
@@ -50,10 +52,17 @@ const login = async(req, res = response) => {
         }
 
         //Genererar el JWT
+        //para trabajar con JWT debemos hacerlo con promesas
+        //lo que se va a grabar en el PAYLOAD sera el usuario.id
+        //la funcion generarJWT( usuario.id ) ira en los HELPERS
+        const token = await generarJWT( usuario.id );
+
 
         //debemos tener solo un res.json en todo el controlador
+        //mandamos el usuario y el token que se acaba de generar
         res.json({
-            msg: 'Login OK'
+            usuario, 
+            token
         });
 
     } catch (error) {
