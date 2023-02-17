@@ -155,9 +155,6 @@ const usuariosDelete = async(req, res = response) => {
     //extraer el ID de los params
     const { id } = req.params;
 
-    //extraer uid
-    const uid = req.uid;
-
     //BORRAR FISICAMENTE
     //ESTE PROCESO ES POCO RECOMENDADO
     //eliminar un usuario fisicamente .findByIdAndDelete() de la base de datos
@@ -169,8 +166,10 @@ const usuariosDelete = async(req, res = response) => {
     //{new: true} ----> para que nos devuelva el registro actualizado y no el anterior ---> ( id, { estado: false}, {new: true} )
     const usuario = await Usuario.findByIdAndUpdate( id, { estado: false}, {new: true} );
 
+    
     //retornamos el usuario que acaba de ser borrado
-    res.json({usuario, uid});
+    //TODO: imprimir usuario y usuarioAutenticado
+    res.json(usuario);
 }
 
 
