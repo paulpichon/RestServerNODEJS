@@ -8,7 +8,8 @@ const { validarCampos } = require('../middlewares/validar-campos');
 //importamos validarJWT para poder hacer uso de JWT
 const { validarJWT } = require('../middlewares/validar-jwt');
 //importar middleware para verificar si es Administrador
-const { esAdminRole } = require('../middlewares/validar-roles');
+//por el momento solo esta habilitado tieneRole para ser flexibles sobre quien puede eliminar registros
+const { esAdminRole, tieneRole } = require('../middlewares/validar-roles');
 
 //importar esRoleValido
 //existeemail para verificar correo existe
@@ -83,7 +84,11 @@ router.delete('/:id', [
     //llamamos el middleware para usar el TOKEN
     validarJWT,
     //middleware para verificar si es administrador
-    esAdminRole,
+    //este middleware fuerza a que el usuario sea administrador sea ADMIN_ROLE
+    //esAdminRole,
+
+    //este middleware es mas flexible ya que permite que sea ADMIN_ROLE y VENTAS_ROLE quienes puedan eliminar registros
+    tieneRole('ADMIN_ROLE', 'VENTAS_ROLE'),
     //middleware para verificar que el ID que venga en la URL se una URL valida de MONGO
     //.isMongoId() ---> verifica sea una URL valida de MONGO
     check('id', 'No es un ID válido').isMongoId(),
