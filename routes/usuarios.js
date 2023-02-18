@@ -1,4 +1,4 @@
-//RUTAS 
+///RUTAS
 //Router permite crear una instancia de nuestro ROUTER
 const { Router } = require('express');
 const { check } = require('express-validator');
