@@ -3,13 +3,22 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-//importar middleware validarCampos
-const { validarCampos } = require('../middlewares/validar-campos');
-//importamos validarJWT para poder hacer uso de JWT
-const { validarJWT } = require('../middlewares/validar-jwt');
-//importar middleware para verificar si es Administrador
-//por el momento solo esta habilitado tieneRole para ser flexibles sobre quien puede eliminar registros
-const { esAdminRole, tieneRole } = require('../middlewares/validar-roles');
+// //importar middleware validarCampos
+// const { validarCampos } = require('../middlewares/validar-campos');
+// //importamos validarJWT para poder hacer uso de JWT
+// const { validarJWT } = require('../middlewares/validar-jwt');
+// //importar middleware para verificar si es Administrador
+// //por el momento solo esta habilitado tieneRole para ser flexibles sobre quien puede eliminar registros
+// const { esAdminRole, tieneRole } = require('../middlewares/validar-roles');
+
+//PARA USAR LAS IMPORTACIONES DEL ARCHIVO INDEX.JS DE LA CARPETA MIDDLEWARE HACEMOS LO SIGUIENTE
+//al ser un archivo INDEX.JS no es necesario especificar el nombre del archivo aunque se puede poner
+const {
+    validarCampos,
+    validarJWT,
+    esAdminRole,
+    tieneRole
+} = require('../middlewares');
 
 //importar esRoleValido
 //existeemail para verificar correo existe
