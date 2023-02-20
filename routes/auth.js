@@ -7,7 +7,8 @@ const { check } = require('express-validator');
 //custom middleware para mostrar errores
 const { validarCampos } = require('../middlewares/validar-campos');
 //importamos la funcion del controlado login
-const { login } = require('../controllers/auth');
+//importamos la funcion para login con GOOGLE SIGN IN
+const { login, googleSignIn } = require('../controllers/auth');
 
 
 
@@ -23,6 +24,15 @@ router.post('/login', [
     //custom middleware para mostrar errores
     validarCampos
 ], login );
+
+//Peticion para autenticarnos con GOOGLE SIGNIN
+router.post('/google', [
+    //debemos mandar el ID_TOKEN el cual se va a generar cuando se presione el boton GOOGLE SIGN IN
+    //no debe de estar vacio .not().isEmpty()
+    check('id_token', 'El id_token de google es necesario').not().isEmpty(),
+    //llamamos nuestro custom middleware validarCampos
+    validarCampos
+], googleSignIn);
 
 //exportar 
 module.exports = router;
