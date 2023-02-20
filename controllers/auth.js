@@ -8,6 +8,8 @@ const bcryptjs = require('bcryptjs');
 const Usuario = require('../models/usuario');
 //importar funcion para generar el TOKEN
 const { generarJWT } = require("../helpers/generar-jwt");
+//importar googleVerify para hace login 
+const { googleVerify } = require("../helpers/google-verify");
 
 
 const login = async(req, res = response) => {
@@ -76,16 +78,31 @@ const login = async(req, res = response) => {
 }
 
 //GOOGLE SIGN-IN
-const googleSignIn = ( req, res = response ) => {
-
+const googleSignIn = async( req, res = response ) => {
+    
     //id_token --> debe de venir en el req.body
     const { id_token } = req.body;
 
-    //mensaje
-    res.json({
-        msg:'todo Bien!',
-        id_token
-    });
+    try {
+        //desestructuramos
+        const { nombre, img, correo } = await googleVerify( id_token );
+
+        //mensaje
+        res.json({
+            msg:'todo Bien!',
+            id_token
+        });
+
+
+    } catch (error) {
+        json.status(400).json({
+            ok: false,
+            msg:'El token no se pudo verificar'
+        });
+    }
+
+
+    
 
 }
 
