@@ -72,6 +72,7 @@
             //desactivar
             google.accounts.id.disableAutoSelect();
 
+            //docuemntacion : https://developers.google.com/identity/gsi/web/guides/revoke?hl=es-419
             //hacer signout
             //google.accounts.id.revoke('correo del usuario a cerrar la secion')
             google.accounts.id.revoke( localStorage.getItem('email'), done => {
