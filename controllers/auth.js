@@ -86,18 +86,57 @@ const googleSignIn = async( req, res = response ) => {
     try {
         //desestructuramos
         const { nombre, img, correo } = await googleVerify( id_token );
+     
+        let usuario = await Usuario.findOne({ correo });//existe o no existe el usuario en nuestra base de datos
+        //si no existe el usuario
+        if (!usuario) {
+            //creamos el usuario
+            const data = {
+                nombre,
+                correo,
+                password: ':P',//No puede ir como STRING vacio ya que por las validaciones marcaria un error, se puede poner lo que sea ya que no importa pero no debe ir vacio
+                img, 
+                rol: "USER_ROLE",
+                google: true
+                //rol: se definio en el Schema de usuario como default por lo que no es necesario ponerlo aqui
+            };
+
+            //se crea instancia de Usuario
+            usuario = new Usuario( data );
+            //se guarda el usuario en la BD
+            await usuario.save();
+
+        }
+
+        //si el usuario tiene el estado: FALSE entonces se niega la autenticacion en la aplicacion
+        //porque puede ser que este eliminado el usuario, o este bloqueado etc etc
+        if( !usuario.estado ) {
+            //uhnouthorized
+            return res.status(401).json({
+                msg: 'Hable con el administrador, usuario bloqueado'
+            });
+        }
+
+        //Genererar el JWT
+        //para trabajar con JWT debemos hacerlo con promesas
+        //lo que se va a grabar en el PAYLOAD sera el usuario.id
+        //la funcion generarJWT( usuario.id ) ira en los HELPERS
+        const token = await generarJWT( usuario.id );
+
 
         //mensaje
         res.json({
-            msg:'todo Bien!',
-            id_token
+            usuario,
+            token
         });
 
 
     } catch (error) {
-        json.status(400).json({
+        console.log( error );
+        //bad request
+        res.status(400).json({
             ok: false,
-            msg:'El token no se pudo verificar'
+            msg:'El token no se pudo verificar o no es valido'
         });
     }
 

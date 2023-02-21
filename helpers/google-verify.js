@@ -25,9 +25,6 @@ async function googleVerify( token = '' ) {
 
 }
 
-//muestra error
-//verify().catch(console.error);
-
 module.exports = {
     googleVerify
 }
