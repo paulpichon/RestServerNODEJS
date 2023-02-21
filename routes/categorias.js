@@ -3,8 +3,11 @@ const { Router } = require('express');
 //para hacer validaciones
 const { check } = require('express-validator');
 
-//custom middleware para mostrar errores
-const { validarCampos } = require('../middlewares/validar-campos');
+//validar los token --> validarJWT
+//validarCampos --> custom middleware para mostrar errores
+const { validarJWT, validarCampos } = require('../middlewares');
+//Importamos crearCategoria
+const { crearCategoria } = require('../controllers/categorias');
 
 //asignar la funcion Router() a una variable
 const router =  Router();
@@ -23,9 +26,14 @@ router.get('/:id', ( req, res ) => {
     res.json("get - ID");
 });
 //Crear categoria - PRIVADO - cualquier persona con un token valido
-router.post('/', ( req, res ) => {
-    res.json("post");
-});
+//para crear una categoria solo pueden hacerlo aquellos que tengan un TOKEN para ello vamos a usar nuestro middleware validarJWT, recordar que en el FRONTEND deben de mandarlo como: x-token --> para probar en POSTMAN
+router.post('/', [ 
+    validarJWT,
+    //tambien usaremos el CHECK ya que NOMBRE es required
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+     //mostrar los errores
+     validarCampos
+], crearCategoria );
 //Actualizar registro por ID - PRIVADO - cualquiera con un token valido
 router.put('/:id', ( req, res ) => {
     res.json("put");

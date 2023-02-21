@@ -1,9 +1,9 @@
-
+//Se crea este archivo para poder exporta desde aqui todos los archivos creados en esta carpeta
 //MODELOS
-const Categoria = required('./categoria');
-const Role = required('./role');
-const Server = required('./server');
-const Usuario = required('./usuario');
+const Categoria = require('./categoria');
+const Role = require('./role');
+const Server = require('./server');
+const Usuario = require('./usuario');
 
 
 //EXPORTAR
