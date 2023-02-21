@@ -14,10 +14,20 @@ class Server {
         //declaramos el puerto donde estaremos escuchando
         this.port = process.env.PORT;
 
+
+
         //Definir las rutas que manejamos para poder tenerlas a la vista
-        this.usuariosPath = '/api/usuarios';
+        //this.usuariosPath = '/api/usuarios';
         //ruta para hacer la autenticacion del login
-        this.authPath     = '/api/auth'
+        //this.authPath     = '/api/auth'
+        //lo que esta arriba comentado es igual a hacer esto
+        this.paths = {
+            auth: '/api/auth',
+            categorias:  '/api/categorias',
+            usuarios: '/api/usuarios'
+        }
+
+
 
         //conectar a la base de datos
         this.conectarDB();
@@ -59,10 +69,13 @@ class Server {
     routes() {
         //Ruta para la autenticacion de usuario
         //this.authPath -> valor definido en el constructor
-        this.app.use( this.authPath, require('../routes/auth'));
+        this.app.use( this.paths.auth, require('../routes/auth'));
+        //Ruta para las categorias
+        //this.paths.categorias -> valor definido en el constructor
+        this.app.use( this.paths.categorias, require('../routes/categorias'));
         //para poder usar las rutas del archivo user.js
         //this.usuariosPath -> valor definido en el constructor
-        this.app.use( this.usuariosPath, require('../routes/usuarios'));
+        this.app.use( this.paths.usuarios, require('../routes/usuarios'));
     }
     //creacion de metodo listen que significara que estara escuchando lo que pasa en ese puerto
     listen() {
