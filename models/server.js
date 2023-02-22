@@ -22,10 +22,11 @@ class Server {
         //this.authPath     = '/api/auth'
         //lo que esta arriba comentado es igual a hacer esto
         this.paths = {
-            auth: '/api/auth',
-            categorias:  '/api/categorias',
+            auth:       '/api/auth',
+            buscar:     '/api/buscar',
+            categorias: '/api/categorias',
             productos:  '/api/productos',
-            usuarios: '/api/usuarios'
+            usuarios:   '/api/usuarios'
         }
 
 
@@ -69,8 +70,11 @@ class Server {
     //creacion de una propiedad llamada routes que manejara todas las rutas de del rest server
     routes() {
         //Ruta para la autenticacion de usuario
-        //this.authPath -> valor definido en el constructor
+        //this.paths -> valor definido en el constructor
         this.app.use( this.paths.auth, require('../routes/auth'));
+        //Ruta para buscar
+        //this.paths -> valor definido en el constructor
+        this.app.use( this.paths.buscar, require('../routes/buscar'));
         //Ruta para las categorias
         //this.paths.categorias -> valor definido en el constructor
         this.app.use( this.paths.categorias, require('../routes/categorias'));
