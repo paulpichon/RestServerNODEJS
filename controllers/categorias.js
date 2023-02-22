@@ -83,12 +83,49 @@ const crearCategoria = async( req, res = response ) => {
     //response con estatus 201 que indica que se guardo algo enla BD de forma exitosa
     res.status(201).json( categoria );
 }   
+//actualizar una categoria
+const actualizarCategoria = async( req, res = response ) => {
+    //extraer el ID
+    const { id } = req.params;
+    //extraemos tanto estado y usuario para quye no sean modificados desde el formulario desde lo que venga en el REQUEST.BODY
+    //y todo lo demas lo ponemos en el ...data
+    const { estado, usuario, ...data } = req.body;
+    //  Poner en mayusculas el nombre de la categoria
+    //a estas alturas ya esta validado que venga el nombre de la categoria
+    data.nombre = data.nombre.toUpperCase();
+    //establecer el usuario --> el que haya hecho la ultima modificacion
+    data.usuario = req.usuario._id; //aqui se asigna el usuario que modifico la categoria
+    
+    //actualizar el registro
+    //.findByIdAndUpdate('id de lo que se va a modificar', 'informacion con lo que se va a modificar', { new:true })
+    //{ new:true } ---> retorna el registro modificado
+    const categoria = await Categoria.findByIdAndUpdate(id, data, { new:true });
+    
+    //response
+    res.json( categoria );
+
+}
+
+//fucion para eliminar una categoria
+const borrarCategoria = async( req, res = response ) => {
+    //obtenemos el ID el cual ya  debe de exisir despues de haber hecho las validaciones
+    const { id } = req.params;
+    //Recordatorio: no se va a borrar el registro solo a cambiar el estado del mismo
+    //con esto cambiamos el estado de la categoria { estado: false }
+    //{ new: true} para reflejar el registro borrado
+    const categoriaBorrada = await Categoria.findByIdAndUpdate( id, { estado: false }, { new: true});
+
+    //response
+    res.json( categoriaBorrada );
+
+}
 
 
-
-//exportamos
+//exportamos las funciones
 module.exports = {
     crearCategoria,
     obtenerCategorias,
-    obtenerCategoria
+    obtenerCategoria,
+    actualizarCategoria,
+    borrarCategoria
 }

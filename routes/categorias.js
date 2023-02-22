@@ -5,11 +5,20 @@ const { check } = require('express-validator');
 
 //validar los token --> validarJWT
 //validarCampos --> custom middleware para mostrar errores
-const { validarJWT, validarCampos } = require('../middlewares');
+const { validarJWT, 
+        validarCampos, 
+        esAdminRole } = require('../middlewares');
+
 //Importamos crearCategoria
 //obtener categorias
 //obtener categoria
-const { crearCategoria, obtenerCategorias, obtenerCategoria } = require('../controllers/categorias');
+//actualizar categoria
+//borrar la categoria
+const { crearCategoria, 
+        obtenerCategorias, 
+        obtenerCategoria, 
+        actualizarCategoria, 
+        borrarCategoria} = require('../controllers/categorias');
 //Verificar si existe la categoria por ID
 const { existeCategoriaPorId } = require('../helpers/db-validators');
 
@@ -44,13 +53,27 @@ router.post('/', [
      validarCampos
 ], crearCategoria );
 //Actualizar registro por ID - PRIVADO - cualquiera con un token valido
-router.put('/:id', ( req, res ) => {
-    res.json("put");
-});
+router.put('/:id', [
+    //validar el JWT
+    validarJWT,
+    //tambien usaremos el CHECK ya que NOMBRE es required
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    //verificar si existe el ID de la categoria
+    check('id').custom( existeCategoriaPorId ),
+    validarCampos
+], actualizarCategoria);
 //borrar una categoria solo Admin puede borrarlo
-router.delete('/:id', ( req, res ) => {
-    res.json("delete");
-});
+router.delete('/:id', [
+    //validar el JWT de quien lo quiere eliminar
+    validarJWT,
+    //una vez validado el JWT, verificar que quien va a borrar la categoria sea un adminRole
+    esAdminRole,
+    //validar que sea un id de mongo valido
+    check('id', 'No es un ID de mongo valido').isMongoId(),
+    //verificar si existe el ID de la categoria
+    check('id').custom( existeCategoriaPorId ),
+    validarCampos
+], borrarCategoria);
 
 
 
