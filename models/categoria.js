@@ -25,6 +25,20 @@ const CategoriaSchema = Schema({
 });
 
 
+//esto es para quitar ciertas campos que no quiere tener en la respuesta del JSON una vez grabado en la BD
+//sobreescribir un metodo llamado toJSON
+//debe ser igual a una funcion NORMAL ya que usaremos THIS
+CategoriaSchema.methods.toJSON = function() {
+    //desestructurar algo que viene de .toObject()
+    //toObject() esto genera una instancia de CategoriaSchema con sus valores respectivos
+    //y dentro de las llaves ponemos lo que queremos quitar
+    //y el resto de argumentos los unificamos con el operador "rest" --->...categoria
+    const { __v, estado,...categoria } = this.toObject();
+    //y retornamos la categoria
+    return categoria;
+ }
+
+
 //exportar
 
 //se debe poner en singular ya que mongo le agrega la "S" al final de cada nombre por ejemplo

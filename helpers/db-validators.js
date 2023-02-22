@@ -1,8 +1,10 @@
 //importar Role de models
 const Role = require('../models/role');
-//para verificar el email
-const Usuario = require('../models/usuario');
+//Usuario = para verificar el email
+//Categoria = verificar si existe categoria por ID
+const { Usuario, Categoria } = require('../models');
 
+/********VALIDADORES DE ROLES *******/
 const esRoleValido = async(rol = '') => {
     //verificar si existe  el rol en la coleccion de la base de datos
     const existeRol = await Role.findOne({ rol });
@@ -14,6 +16,8 @@ const esRoleValido = async(rol = '') => {
     }
 
 }
+
+/***VALIDADORES DE USUARIOS****/
 
 //funcion para verificar si un email existe
 const existeEmail = async( correo = '' ) => {
@@ -40,9 +44,23 @@ const existeUsuarioPorId = async( id) => {
     }
 }
 
+//VALIDADORES DE CATEGORIAS
+
+//validar existeCategoria del controlador categorias.js
+const existeCategoriaPorId = async( id) => {
+    //.findById() --> encuentra un registro por ID
+    const existeCategoria = await Categoria.findById(id);
+    //si es NULL
+    if ( !existeCategoria ) {
+        //presonalizamos nuestro mensaje de error
+        throw new Error(`El id ${ id } no existe`);
+    }
+}
+
 //exportar 
 module.exports = {
     esRoleValido,
     existeEmail,
-    existeUsuarioPorId
+    existeUsuarioPorId,
+    existeCategoriaPorId
 }

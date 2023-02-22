@@ -7,7 +7,11 @@ const { check } = require('express-validator');
 //validarCampos --> custom middleware para mostrar errores
 const { validarJWT, validarCampos } = require('../middlewares');
 //Importamos crearCategoria
-const { crearCategoria } = require('../controllers/categorias');
+//obtener categorias
+//obtener categoria
+const { crearCategoria, obtenerCategorias, obtenerCategoria } = require('../controllers/categorias');
+//Verificar si existe la categoria por ID
+const { existeCategoriaPorId } = require('../helpers/db-validators');
 
 //asignar la funcion Router() a una variable
 const router =  Router();
@@ -18,13 +22,18 @@ const router =  Router();
 
 
 //obtener todas las categorias - publico
-router.get('/', ( req, res ) => {
-    res.json("get");
-});
+//controlador para obtenerCategorias
+router.get('/', obtenerCategorias);
 //obtener solo una categoria por ID - publico
-router.get('/:id', ( req, res ) => {
-    res.json("get - ID");
-});
+router.get('/:id',[
+    //validar que sea un id de mongo valido
+    check('id', 'No es un ID de mongo valido').isMongoId(),
+    //verificar si existe categoria
+    check('id').custom( existeCategoriaPorId ),
+    //validar campos midleware propio
+    validarCampos
+    
+], obtenerCategoria);
 //Crear categoria - PRIVADO - cualquier persona con un token valido
 //para crear una categoria solo pueden hacerlo aquellos que tengan un TOKEN para ello vamos a usar nuestro middleware validarJWT, recordar que en el FRONTEND deben de mandarlo como: x-token --> para probar en POSTMAN
 router.post('/', [ 

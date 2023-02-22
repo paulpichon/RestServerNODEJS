@@ -4,6 +4,52 @@ const { response } = require("express");
 //tambien se puede poner require('../models/index'), pero poner INDEX al final esta demas ya que NODE detecta automaticamente el archivo INDEX
 const { Categoria } = require('../models');
 
+//obtenerCategorias - Paginado - Total - Populate
+const obtenerCategorias = async(req, res = response) => {
+    //************************************************************************* */
+    //desestructurar de los argumentos que vienen en el request.query
+    //en caso de que no venga el limite en los parametros de la URL le ponemos por defecto limite = 5
+    //desde = 0 desde que registro me va a mostrar informacion por ejemplo desde = 5
+    const { limite = 5, desde = 0} = req.query;
+    //variable para que determinemos el estado de las categorias true/false 
+    //categorias que solo esten activos estado = true ---> dentro de .find({ estado: true })
+    const query = { estado: true }
+    
+    //GET de todos los usuarios
+    //creamos una Promesa ---> Promise.all() para que solucionar el retardo del conteo de los registros que se hace despues de traer todas las categorias
+    //permite crear un arreglo con todas las PROMESAS que quiero que se ejecuten
+    //la respuesta sera una coleccion de promesas
+    //aplicamos desestructuracion de ARREGLOS
+    const [total, categorias] = await Promise.all([
+        Categoria.countDocuments(query),
+        Categoria.find(query)
+            .populate('usuario', 'nombre') //traer la informacion del usuario que creo la categoria
+            //especifica desde donde nostraera informacion
+            .skip(Number( desde ))
+            //limitar el numero de querys que nos traera la consulta
+            //.limit()   ---> dentro de los parentesis va el numero de registros que quiero que traiga
+            //por si las dudas convertimos limite de un string a un numero
+            .limit( Number( limite ) )
+    ]);
+
+    //retornamos la respuesta
+    res.json({ 
+        total,
+        categorias 
+    });
+}
+
+//obtener una sola categoria
+const obtenerCategoria = async( req, res = response ) => {
+    //obtenemos el ID que viene en la URL
+    const { id } = req.params;
+    //buscamos por ID
+    //solo mostrar nombre del usuario que creo la categoria con .populate()
+    const categoria = await Categoria.findById( id ).populate('usuario', 'nombre');
+    //respuesta
+    res.json( categoria );
+}
+
 const crearCategoria = async( req, res = response ) => {
 
     //extraer el nombre que viene en la RESQUEST.body
@@ -42,5 +88,7 @@ const crearCategoria = async( req, res = response ) => {
 
 //exportamos
 module.exports = {
-    crearCategoria
+    crearCategoria,
+    obtenerCategorias,
+    obtenerCategoria
 }
