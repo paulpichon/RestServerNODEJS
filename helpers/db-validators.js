@@ -2,7 +2,8 @@
 const Role = require('../models/role');
 //Usuario = para verificar el email
 //Categoria = verificar si existe categoria por ID
-const { Usuario, Categoria } = require('../models');
+//Producto = verificar si existe producto por ID
+const { Usuario, Categoria, Producto } = require('../models');
 
 /********VALIDADORES DE ROLES *******/
 const esRoleValido = async(rol = '') => {
@@ -57,10 +58,24 @@ const existeCategoriaPorId = async( id) => {
     }
 }
 
+//VALIDADORES DE PRODUCTOS
+
+//validar existeProducto del controlador productos.js
+const existeProductoPorId = async( id) => {
+    //.findById() --> encuentra un registro por ID
+    const existeProducto = await Producto.findById(id);
+    //si es NULL
+    if ( !existeProducto ) {
+        //presonalizamos nuestro mensaje de error
+        throw new Error(`El id ${ id } no existe`);
+    }
+}
+
 //exportar 
 module.exports = {
     esRoleValido,
     existeEmail,
     existeUsuarioPorId,
-    existeCategoriaPorId
+    existeCategoriaPorId,
+    existeProductoPorId
 }

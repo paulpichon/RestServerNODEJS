@@ -24,6 +24,7 @@ class Server {
         this.paths = {
             auth: '/api/auth',
             categorias:  '/api/categorias',
+            productos:  '/api/productos',
             usuarios: '/api/usuarios'
         }
 
@@ -73,6 +74,9 @@ class Server {
         //Ruta para las categorias
         //this.paths.categorias -> valor definido en el constructor
         this.app.use( this.paths.categorias, require('../routes/categorias'));
+        //Ruta para las productos
+        //this.paths.productos -> valor definido en el constructor
+        this.app.use( this.paths.productos, require('../routes/productos'));
         //para poder usar las rutas del archivo user.js
         //this.usuariosPath -> valor definido en el constructor
         this.app.use( this.paths.usuarios, require('../routes/usuarios'));
