@@ -77,10 +77,10 @@ const usuariosPost = async(req, res = response) => {
     //esto es lo que viene como peticion del usuario es el REQUEST-> req de nuestro parametro
     //podemos desestructurarlo
     //const body = req.body;
-    const { nombre, correo, password, rol } = req.body;
+    const { nombre, correo, password, rol, img } = req.body;
     //creando una instancia de Usuario para poder grabar en la base de datos
     //y pasamos como argumento el body
-    const usuario = new Usuario({ nombre, correo, password, rol });
+    const usuario = new Usuario({ nombre, correo, password, rol, img });
     
     //Verificar si el correo esta repetido
     //findOne() --> metodo/funcion para verificar si hay algun correo repetido
