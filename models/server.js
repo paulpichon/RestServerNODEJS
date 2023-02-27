@@ -26,7 +26,8 @@ class Server {
             buscar:     '/api/buscar',
             categorias: '/api/categorias',
             productos:  '/api/productos',
-            usuarios:   '/api/usuarios'
+            usuarios:   '/api/usuarios',
+            uploads:    '/api/uploads'
         }
 
 
@@ -84,6 +85,8 @@ class Server {
         //para poder usar las rutas del archivo user.js
         //this.usuariosPath -> valor definido en el constructor
         this.app.use( this.paths.usuarios, require('../routes/usuarios'));
+        //ruta para la carga de archivos
+        this.app.use( this.paths.uploads, require('../routes/uploads'));
     }
     //creacion de metodo listen que significara que estara escuchando lo que pasa en ese puerto
     listen() {
