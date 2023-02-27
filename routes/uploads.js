@@ -15,8 +15,8 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const router =  Router();
 
 //crear un nuevo recurso en el servidor
+//aqui podriamos hacer las validaciones necesarios para el manejo del archivo con los middlewares
 router.post('/', cargarArchivo);
-
 
 //exportar 
 module.exports = router;
