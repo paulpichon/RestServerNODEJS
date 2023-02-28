@@ -1,5 +1,8 @@
 //vamos a importar el PATH
 const path = require('path');
+//UUID para cambiar el nombre de los archivos por ID´S
+const { v4: uuidv4 } = require('uuid');
+// uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
 
 //importamos express para ayudarnos con el tipado
 const { response } = require("express");
@@ -39,28 +42,25 @@ const cargarArchivo = ( req, res = response ) => {
         });
     }
 
+    //vamos a usar UUID NPM para cambiar el nombre de los archivos por ID´S
 
-    res.json({
-        extension
-    });
-
-    console.log( nombreCortado );
-
+    //nombre temporal del archivo y le añadimos la extension
+    const nombreTemp = uuidv4() + '.' + extension;
 
     //construccion del path a donde moveremos el archivo
     //The join() method creates and returns a new string by concatenating all of the elements in an array
-    // const uploadPath = path.join( __dirname, '../uploads/', archivo.name );
+    const uploadPath = path.join( __dirname, '../uploads/', nombreTemp );
 
-    // //.mv() ---> mueve el archivo
-    // archivo.mv(uploadPath, (err) => {
-    //     if (err) {
-    //     return res.status(500).json({err});
-    //     }
+    //.mv() ---> mueve el archivo
+    archivo.mv(uploadPath, (err) => {
+        if (err) {
+        return res.status(500).json({err});
+        }
 
-    //     res.json({
-    //         msg: 'File uploaded to ' + uploadPath
-    //     });
-    // });
+        res.json({
+            msg: 'File uploaded to ' + uploadPath
+        });
+    });
 
 
 }
