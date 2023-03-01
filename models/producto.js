@@ -32,7 +32,8 @@ const ProductoSchema = Schema({
         required: true
     },
     descripcion: { type: String },//hace referencia a la existencia del producto
-    disponible: { type: Boolean, default: true }
+    disponible: { type: Boolean, default: true },//saber si esta disponible el producto o no
+    img: { type: String }//imagen del producto
 });
 
 
