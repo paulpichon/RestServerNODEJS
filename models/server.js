@@ -68,7 +68,9 @@ class Server {
         //middleware para el manejo de la carga de archivos - FileUpload
         this.app.use( fileUpload({
             useTempFiles : true,
-            tempFileDir : '/tmp/'
+            tempFileDir : '/tmp/',
+            //crear carpetas si es que no estan creadas
+            createParentPath: true 
         }));
 
     }

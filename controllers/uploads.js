@@ -16,11 +16,23 @@ const cargarArchivo = async( req, res = response ) => {
         return;
     }
 
-    //imagenes
-    //mandamos los re.files como argumento de la funcion que viene de los helpers
-    const nombre = await subirArchivo( req.files );
-    //
-    res.json({ nombre });
+    //ponemos un try catch para poder manejar el error como nosotros queremos
+    try {
+        //imagenes
+        //mandamos los re.files como argumento de la funcion que viene de los helpers
+        //podemos mandar como un segundo parametro un arreglo con las extensiones permitidas
+        //y tambien se le puede añadir el tercer argumento que es el del nombre de la carpeta
+        //incluso si no existe la carpeta esta habilitado en el archivo server.js el que se pueda crear la carpeta en caso de que no existe
+        //en caso de que no se manden tanto el segundo como tercer argumento mandapor undefined en el segundo argumento y en el tercer argumento mandamos 'imgs' que es el nombre de la carpeta
+        //const nombre = await subirArchivo( req.files, ['txt', 'md'], 'textos' );
+        const nombre = await subirArchivo( req.files, undefined, 'imgs' );
+
+        res.json({ nombre });
+
+    } catch (msg) {
+        //mensaje de error
+        res.status(400).json({ msg });
+    }
 
 }
 
