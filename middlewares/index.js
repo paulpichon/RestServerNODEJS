@@ -1,10 +1,12 @@
 //importar middleware validarCampos
 const validarCampos = require('../middlewares/validar-campos');
 //importamos validarJWT para poder hacer uso de JWT
-const validarJWT = require('../middlewares/validar-jwt');
+const validarJWT    = require('../middlewares/validar-jwt');
 //importar middleware para verificar si es Administrador
 //por el momento solo esta habilitado tieneRole para ser flexibles sobre quien puede eliminar registros
-const tieneRole = require('../middlewares/validar-roles');
+const tieneRole     = require('../middlewares/validar-roles');
+//funcion para validar que venga un archivo en el INPUT
+const validarArchivo = require('../middlewares/validar-archivo');
 
 
 //exportar las constantes
@@ -19,4 +21,5 @@ module.exports = {
     ...validarCampos,
     ...validarJWT,
     ...tieneRole,
+    ...validarArchivo
 }
