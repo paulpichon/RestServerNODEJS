@@ -71,11 +71,33 @@ const existeProductoPorId = async( id) => {
     }
 }
 
+/***
+ * validar colecciones permitidas
+ * */ 
+//RECORDAR QUE ESTA FUNCION NO VALIDA QUE EL UID DEL USUARIO DE LA COLECCIONES USUARIOS EXISTA, SOLO VALIDA QUE TANTO LA COLECCIONY EL UID SEAN VALIDOS
+//coleccion = la coleccion recibida del PUT
+//colecciones = colecciones permitidas
+const coleccionesPermitidas = ( coleccion = '', colecciones = []) => {
+    //verificar si la coleccion recibida esta en el arreglo de colecciones permitidas
+    const incluida = colecciones.includes( coleccion );
+    //si no esta incluida
+    if (!incluida) {
+        //mostrar mensaje
+        throw new Error(`La colección ${ coleccion } no es permitida, ${ colecciones } `);
+    }
+
+    //si todo sale bien debemos retornar un TRUE
+    return true;
+
+}
+
+
 //exportar 
 module.exports = {
     esRoleValido,
     existeEmail,
     existeUsuarioPorId,
     existeCategoriaPorId,
-    existeProductoPorId
+    existeProductoPorId,
+    coleccionesPermitidas
 }

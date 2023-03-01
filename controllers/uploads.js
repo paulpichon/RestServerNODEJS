@@ -36,8 +36,18 @@ const cargarArchivo = async( req, res = response ) => {
 
 }
 
+//controlador para actualizar imagen
+const actualizarImagen = async( req, res = response) => {
+
+    //desestructurar el id y la coleccion del req.params
+    const { id, coleccion } = req.params;
+
+    res.json({ id, coleccion});
+
+} 
 
 //exports
 module.exports = {
-    cargarArchivo
+    cargarArchivo,
+    actualizarImagen
 }

@@ -1,2 +1,2 @@
 #Nota
-Aqui van a guardarse todas las imagenes
+Aqui van a guardarse todas las **imagenes**
