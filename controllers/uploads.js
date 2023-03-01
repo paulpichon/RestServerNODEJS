@@ -1,3 +1,7 @@
+//PATH ya esta incluido en NODE.JS
+const path = require('path');
+//importar fileSytem para verificar si existe determinado PATH
+const fs   = require('fs');
 //importamos express para ayudarnos con el tipado
 const { response } = require("express");
 //helper para la subida de archivos
@@ -69,6 +73,24 @@ const actualizarImagen = async( req, res = response) => {
             return res.status( 500 ).json({ msg: 'Se me olvidó validar esto' });
 
     }
+
+    //ESTA FUNCION SOLO SE EJECUTARA SI LA PROPIEDAD IMG EXISTE, Y SI EXISTE EL PATH DE LA IMAGEN, ENTONCES BORRARA LA IMAGEN/ARCHIVO
+    //Limpiar imágenes previas
+    //verificar si el modelo.img existe es decir si existela propieda img del modelo usuarios/productos pero eso no quiere decir que la imagen exista
+    if ( modelo.img) {
+        //hay que borrar la imagen del servidor
+        //construimos la ruta
+        const pathImagen = path.join( __dirname, '../uploads', coleccion, modelo.img );
+
+        //VERIFICAR SI EXISTE EL PATH
+        //.existsSync = verifica si existe un PATH
+        if ( fs.existsSync( pathImagen ) ) {
+            //si existe, borramos la imagen
+            fs.unlinkSync( pathImagen );
+        }
+
+    }
+
          
     /*
         Esto funciona tanto para guardar imagenes del modelo Usuarios como para Productos
