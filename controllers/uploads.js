@@ -110,8 +110,73 @@ const actualizarImagen = async( req, res = response) => {
 
 } 
 
+//controlador para mostrar imagen
+const mostrarImagen = async( req, res = response ) => {
+    
+    //desestructurar el id y la coleccion del req.params
+    const { id, coleccion } = req.params;
+    //se va a establecer el valor de modelo de forma condicional
+    let modelo;
+
+    switch( coleccion ){
+        case 'usuarios':
+            //buscar del modelo usuario por el ID
+            modelo =  await Usuario.findById( id );
+            //si no hay conincidencia
+            if ( !modelo ) {
+                return res.status( 400 ).json({
+                    msg: `No existe un usuario con el ID ${ id }`
+                });
+            }
+
+
+        break;
+        
+        case 'productos':
+            //buscar de productos por el ID
+            modelo =  await Producto.findById( id );
+            //si no hay conincidencia
+            if ( !modelo ) {
+                return res.status( 400 ).json({
+                    msg: `No existe un producto con el ID ${ id }`
+                });
+            }
+
+
+        break;
+
+        default:
+            //este mensaje es en caso de que cuando se suba al servidor o repositorio muestre este mensaje podria ser que se haya olvidado validar algo 
+            return res.status( 500 ).json({ msg: 'Se me olvidó validar esto' });
+
+    }
+
+    //ESTA FUNCION SOLO SE EJECUTARA SI LA PROPIEDAD IMG EXISTE, Y SI EXISTE EL PATH DE LA IMAGEN, ENTONCES BORRARA LA IMAGEN/ARCHIVO
+    //Limpiar imágenes previas
+    //verificar si el modelo.img existe es decir si existela propieda img del modelo usuarios/productos pero eso no quiere decir que la imagen exista
+    if ( modelo.img) {
+        //hay que borrar la imagen del servidor
+        //construimos la ruta
+        const pathImagen = path.join( __dirname, '../uploads', coleccion, modelo.img );
+
+        //VERIFICAR SI EXISTE EL PATH
+        //.existsSync = verifica si existe un PATH
+        if ( fs.existsSync( pathImagen ) ) {
+            //retornamos el PATH de la imagen
+            return res.sendFile( pathImagen );
+        }
+
+    }
+
+    //
+    res.json('falta place holder');
+
+}
+
 //exports
 module.exports = {
     cargarArchivo,
-    actualizarImagen
+    actualizarImagen,
+    mostrarImagen,
+    mostrarImagen
 }

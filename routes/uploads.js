@@ -8,7 +8,9 @@ const { check } = require('express-validator');
 //validar archivo a subir
 const { validarCampos, validarArchivoSubir } = require('../middlewares');
 //importamos funcion para crear recursos/archivos
-const { cargarArchivo, actualizarImagen } = require('../controllers/uploads');
+//actualizar imagen
+//mostrar imagen
+const { cargarArchivo, actualizarImagen, mostrarImagen } = require('../controllers/uploads');
 //colecciones permitidas
 const { coleccionesPermitidas } = require('../helpers');
 
@@ -39,6 +41,12 @@ router.put('/:coleccion/:id', [
     validarCampos
 
 ], actualizarImagen);
+
+//MOSTRAR IMAGEN
+router.get('/:coleccion/:id', [
+    check('id', 'El id debe ser de MONGO').isMongoId(),
+    check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios', 'productos '] ))
+], mostrarImagen);
 
 //exportar 
 module.exports = router;
