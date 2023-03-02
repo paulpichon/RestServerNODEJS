@@ -161,8 +161,15 @@ const actualizarImagenCloudinary = async( req, res = response) => {
     //Limpiar imágenes previas
     //verificar si el modelo.img existe es decir si existela propieda img del modelo usuarios/productos pero eso no quiere decir que la imagen exista
     if ( modelo.img) {
-        
-
+        //conrtar nombre de la imagen para poder identificarla
+        //https://res.cloudinary.com/dy9prn3ue/image/upload/v1677728018/kykdj6ef9vnvj1xwmwip.jpg
+        const nombreArr = modelo.img.split('/');
+        //obtener la ultima posicion del arreglo, asi obtenemos la ultima posicion de un arreglo nombreArr.length - 1
+        const nombre = nombreArr[ nombreArr.length - 1 ];
+        //volvemos a cortar con un split() el arreglo
+        const [ public_id ] = nombre.split('.'); // ['kykdj6ef9vnvj1xwmwip']
+        //eliminar imagen de cloudinary mediante el PUBLIC_ID
+        cloudinary.uploader.destroy( public_id );
 
     }
 
