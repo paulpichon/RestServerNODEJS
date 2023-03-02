@@ -10,7 +10,8 @@ const { validarCampos, validarArchivoSubir } = require('../middlewares');
 //importamos funcion para crear recursos/archivos
 //actualizar imagen
 //mostrar imagen
-const { cargarArchivo, actualizarImagen, mostrarImagen } = require('../controllers/uploads');
+//por el momento no usaremos actualizarImagen, usaremos actualizarImagenCloudinary
+const { cargarArchivo, actualizarImagen, mostrarImagen, actualizarImagenCloudinary } = require('../controllers/uploads');
 //colecciones permitidas
 const { coleccionesPermitidas } = require('../helpers');
 
@@ -40,7 +41,8 @@ router.put('/:coleccion/:id', [
     //llamamos validar campos para bloquear algun otro error
     validarCampos
 
-], actualizarImagen);
+], actualizarImagenCloudinary); //usaremos esta funcion en ligar de la de actualizarImagen para poder almacenar en CLOUDINARY
+// ], actualizarImagen);   //esta tambien la podemos usar pero es sin CLOUDINARY
 
 //MOSTRAR IMAGEN
 router.get('/:coleccion/:id', [

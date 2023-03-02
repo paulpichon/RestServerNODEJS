@@ -2,6 +2,11 @@
 const path = require('path');
 //importar fileSytem para verificar si existe determinado PATH
 const fs   = require('fs');
+// Require the Cloudinary library
+const cloudinary = require('cloudinary').v2
+//configuracion de cloudinary CON LA VARIABLE DE ENTORNO CLOUDINARY_URL
+cloudinary.config( process.env.CLOUDINARY_URL );
+
 //importamos express para ayudarnos con el tipado
 const { response } = require("express");
 //helper para la subida de archivos
@@ -110,6 +115,80 @@ const actualizarImagen = async( req, res = response) => {
 
 } 
 
+//controlador para actualizar imagen MEDIANTE CLOUDINARY
+//esta funcion es la que vamos aestar usando para guardar las imagenes en CLOUDINARY
+const actualizarImagenCloudinary = async( req, res = response) => {
+
+    //desestructurar el id y la coleccion del req.params
+    const { id, coleccion } = req.params;
+    //se va a establecer el valor de modelo de forma condicional
+    let modelo;
+
+    switch( coleccion ){
+        case 'usuarios':
+            //buscar del modelo usuario por el ID
+            modelo =  await Usuario.findById( id );
+            //si no hay conincidencia
+            if ( !modelo ) {
+                return res.status( 400 ).json({
+                    msg: `No existe un usuario con el ID ${ id }`
+                });
+            }
+
+
+        break;
+        
+        case 'productos':
+            //buscar de productos por el ID
+            modelo =  await Producto.findById( id );
+            //si no hay conincidencia
+            if ( !modelo ) {
+                return res.status( 400 ).json({
+                    msg: `No existe un producto con el ID ${ id }`
+                });
+            }
+
+
+        break;
+
+        default:
+            //este mensaje es en caso de que cuando se suba al servidor o repositorio muestre este mensaje podria ser que se haya olvidado validar algo 
+            return res.status( 500 ).json({ msg: 'Se me olvidó validar esto' });
+
+    }
+
+    //ESTA FUNCION SOLO SE EJECUTARA SI LA PROPIEDAD IMG EXISTE, Y SI EXISTE EL PATH DE LA IMAGEN, ENTONCES BORRARA LA IMAGEN/ARCHIVO
+    //Limpiar imágenes previas
+    //verificar si el modelo.img existe es decir si existela propieda img del modelo usuarios/productos pero eso no quiere decir que la imagen exista
+    if ( modelo.img) {
+        
+
+
+    }
+
+    /*
+        Esto funciona tanto para guardar imagenes del modelo Usuarios como para Productos
+    */
+    //subir a CLOUDINARY
+    // console.log( req.files.archivo);
+    //el tempFilePath viene de ---> req.files.archivo
+    //tempFilePath contiene temporalmente el archivo
+    const { tempFilePath } = req.files.archivo;
+    //subir el archivo
+    const { secure_url } = await cloudinary.uploader.upload( tempFilePath ); //esto regresa una promesa
+    // res.json( resp );
+    //de la respuesta no necesitamos mas que el secure_url
+    modelo.img = secure_url;
+
+
+
+    //por ultimo lo guardamos en la base de datos
+    await modelo.save();
+    //retornemos al modelo
+    res.json( modelo );
+
+} 
+
 //controlador para mostrar imagen
 const mostrarImagen = async( req, res = response ) => {
     
@@ -183,5 +262,6 @@ module.exports = {
     cargarArchivo,
     actualizarImagen,
     mostrarImagen,
-    mostrarImagen
+    mostrarImagen,
+    actualizarImagenCloudinary
 }
