@@ -45,7 +45,9 @@ router.put('/:coleccion/:id', [
 //MOSTRAR IMAGEN
 router.get('/:coleccion/:id', [
     check('id', 'El id debe ser de MONGO').isMongoId(),
-    check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios', 'productos '] ))
+    check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios', 'productos '] )),
+    //obtener/detener errores
+    validarCampos
 ], mostrarImagen);
 
 //exportar 

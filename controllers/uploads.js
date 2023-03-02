@@ -168,8 +168,13 @@ const mostrarImagen = async( req, res = response ) => {
 
     }
 
+
     //
-    res.json('falta place holder');
+    // /Path en caso de que no haya ninguna imagen del usuario o producto
+    const pathNoImagen = path.join( __dirname, '../assets/no-image.jpg');
+    //mostrar la imagen, no imagen.jpg
+    //retornamos el PATH de la imagen
+    res.sendFile( pathNoImagen );
 
 }
 

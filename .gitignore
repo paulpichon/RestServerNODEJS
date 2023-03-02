@@ -5,3 +5,7 @@ node_modules/
 
 #variables de entorno
 .env
+
+#ignorar todo de carpetas PRODUCTOS Y USUARIOS
+uploads/productos/**.*
+uploads/usuarios/**.*
